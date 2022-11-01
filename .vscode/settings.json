@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./Credentials",
+        "./PyTools/myToolHelpers"
+    ]
+}
