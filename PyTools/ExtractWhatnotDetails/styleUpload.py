@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import date
+import datetime
 
 def formatCust(data, path):
     data = data.drop_duplicates(subset = ['address'])
@@ -45,7 +45,8 @@ def formatCust(data, path):
     custData.to_excel(path + 'CustUpload.xlsx', index = False, header = True)
 
 def formatInvoice(data, path):
-    today = date.today()
+    today = datetime.date.today()
+    #today = today + datetime.timedelta(days=1)
     today = today.strftime('%m/%d/%Y')
     invoiceData = pd.DataFrame({'Invoice No':'WN-'+data['orderNum'],
                                 'Customer':data['fullname'],

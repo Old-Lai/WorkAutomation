@@ -6,7 +6,7 @@ def downloadPDFFile(reportPath, downloadPath):
     data = pd.DataFrame(csv_data)
     data = data[data['cancelled'] != 'Yes']
     numOfData = data.shape[0]
-    data = data.drop_duplicates(subset=['buyer'], keep = 'last')
+    data = data.drop_duplicates(subset=['tracking'], keep = 'last')
     print(data['buyer'])
     links = data['shipment manifest']
 

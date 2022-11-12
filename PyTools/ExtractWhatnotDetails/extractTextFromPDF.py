@@ -25,12 +25,16 @@ def extractFromFile(filePath):
             break
         addressArr += line
 
-    addressArr = addressArr.split('.')
-    address = addressArr[0].strip()
-    city = addressArr[1][:addressArr[1].find(',')].strip()
-    state = addressArr[1][addressArr[1].find(',')+1:].strip()
-    zip = addressArr[2].strip()
-    country = addressArr[3].strip()
+    addressArr = addressArr.split(',')
+    address = ''
+    for addressLine in ''.join(addressArr[:-1]).split('.')[:-1]:
+        address += addressLine.strip() + ' '
+
+    address = address.strip()
+    city = ''.join(addressArr[:-1]).split('.')[-1]
+    state = addressArr[-1].split('.')[0]
+    zip = addressArr[-1].split('.')[1]
+    country = addressArr[-1].split('.')[-1]
 
     tracking = ''
     for line in textArr:
@@ -90,6 +94,10 @@ def extractFromFile(filePath):
     for i in range(len(brand)):
         if(brand[i] == 'Emporio' or brand[i] == 'Armani'):
             brand[i] = 'Emporio Armani'
+
+    for i in range(len(description)):
+        if(description[i].lower().find('set') != -1 or description[i].lower().find('organizer') != -1):
+            brand[i] = ''
 
     fullname = firstname + ' ' + lastname
     list = [fullname, firstname, lastname, address, city, state, zip, country, tracking, brand, description, orderNum, price]
