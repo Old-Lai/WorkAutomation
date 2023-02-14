@@ -5,8 +5,8 @@ from datetime import datetime
 import time
 
 import sys
-sys.path.append('Credentials')
-sys.path.append('PyTools/myToolHelpers')
+sys.path.append('/Users/henry/Documents/Others/WorkSpace/WatchShoppingAutomation/Credentials')
+sys.path.append('/Users/henry/Documents/Others/WorkSpace/WatchShoppingAutomation/PyTools/myToolHelpers')
 import loginDetails
 from webScratchHelper import *
 

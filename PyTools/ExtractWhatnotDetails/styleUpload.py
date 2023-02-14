@@ -5,11 +5,11 @@ def formatCust(data, path):
     data = data.drop_duplicates(subset = ['address'])
     custData = pd.DataFrame({'title':'',
                              'Company':'',
-                             'First Name': data['firstname'].tolist(),
+                             'First Name': data['firstname'],
                              'Middle Name':'',
-                             'Last Name': data['lastname'].tolist(),
+                             'Last Name': data['lastname'],
                              'Suffix':'',
-                             'Display Name As':data['fullname'].tolist(),
+                             'Display Name As':data['fullname'],
                              'Print On Check As':'',
                              'Billing Address Line 1':data['address'],
                              'Billing Address Line 2':'',
@@ -42,12 +42,16 @@ def formatCust(data, path):
                              'Notes':'',
                              'Customer Taxable':'',
                              'Currency Code':''})
-    custData.to_excel(path + 'CustUpload.xlsx', index = False, header = True)
+    today = datetime.date.today()
+    today = today.strftime('%m-%d-%Y')
+    custData.to_excel(path + today + ' WNcust.xlsx', index = False, header = True)
 
 def formatInvoice(data, path):
     today = datetime.date.today()
-    #today = today + datetime.timedelta(days=1)
+    today = today + datetime.timedelta(days=0)
     today = today.strftime('%m/%d/%Y')
+    invoiceFullName = ''
+    invoiceFullName = list(map(lambda fullname, username: fullname + ' ' + username, list(data['fullname']), list(data['username'])))
     invoiceData = pd.DataFrame({'Invoice No':'WN-'+data['orderNum'],
                                 'Customer':data['fullname'],
                                 'Invoice Date':today,
@@ -56,14 +60,14 @@ def formatInvoice(data, path):
                                 'Ship Via':'USPS',
                                 'Tracking no':data['tracking'],
                                 'Terms':'Prepaid',
-                                'Billing Address Line 1':data['fullname'],
+                                'Billing Address Line 1':invoiceFullName,
                                 'Billing Address Line 2':data['address'],
                                 'Billing Address Line 3':'',
                                 'Billing Address City':data['city'],
                                 'Billing Address Postal Code':data['zip'],
                                 'Billing Address Country':data['country'],
                                 'Billing Address State':data['state'],
-                                'Shipping Address Line 1':data['fullname'],
+                                'Shipping Address Line 1':invoiceFullName,
                                 'Shipping Address Line 2':data['address'],
                                 'Shipping Address Line 3':'',
                                 'Shipping Address City':data['city'],
@@ -87,7 +91,7 @@ def formatInvoice(data, path):
                                 'Product/Service Rate':data['price'],
                                 'Product/Service Amount':data['price'],
                                 'Product/Service Taxable':'False',
-                                'Product/Service Class':'',
+                                'Product/Service Class':'WhatNot - Direct Sales',
                                 'Show Sub Total':'',
                                 'Deposit':'',
                                 'Location':'',
@@ -99,7 +103,7 @@ def formatInvoice(data, path):
                                 'Print Status':'True',
                                 'Email Status':'False'})
 
-    notes = pd.DataFrame({'Invoice No':'WN-'+data['orderNum'],
+    notes = pd.DataFrame({'Invoice No':'WN-'+data.drop_duplicates(subset = ['orderNum'])['orderNum'],
                                 'Customer':'',
                                 'Invoice Date':'',
                                 'Due Date':'',
@@ -151,5 +155,7 @@ def formatInvoice(data, path):
                                 'Email Status':'False'})
 
     #invoiceData = invoiceData.append(notes, ignore_index = True)
+    today = datetime.date.today()
+    today = today.strftime('%m-%d-%Y')
     invoiceData = pd.concat([invoiceData, notes])
-    invoiceData.to_excel(path + 'InvoiceUpload.xlsx', index = False, header = True)
+    invoiceData.to_excel(path + today + ' WNinvoice.xlsx', index = False, header = True)
