@@ -17,7 +17,7 @@ class DataManager():
     def processRawData(self, reportDir, exportDir):
         rawCsvData = pd.read_csv(reportDir, dtype=str)
         data = pd.DataFrame(rawCsvData)
-        self.processingData = pd.concat([self.processingData, data.query('Status == "processing" | Status == "pending" | Status == "complete"')])
+        self.processingData = pd.concat([self.processingData, data.query('Status == "processing" | Status == "pending"')])
         self.holdedData = pd.concat([self.holdedData, data[data['Status'] == 'holded']]) 
         self.completedData = pd.concat([self.completedData, data[data['Status'] == 'complete']]) 
         self.closed_CancledData = pd.concat([self.closed_CancledData, data.query('Status == "closed" | Status == "canceled"')]) 

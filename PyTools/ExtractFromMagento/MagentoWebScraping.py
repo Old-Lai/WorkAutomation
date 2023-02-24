@@ -51,7 +51,7 @@ class MagentoWebScrap:
         if not idEle : raise Exception
         idEle = eleByXPATH(idEle, 1, '..')
         idEle = eleByXPATH(idEle, 1, '..')
-        viewButton = eleByXPATH(idEle, 2, './/td[10]/a', 'view button not found')
+        viewButton = eleByXPATH(idEle, 2, './/td[13]/a', 'view button not found')
         if not viewButton : raise Exception
         self.driver.get(viewButton.get_attribute('href'))
 

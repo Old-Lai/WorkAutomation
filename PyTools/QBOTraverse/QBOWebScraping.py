@@ -3,12 +3,17 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 import time
+
+import sys
+sys.path.append('/Users/henry/Documents/Others/WorkSpace/WatchShoppingAutomation/Credentials')
+sys.path.append('/Users/henry/Documents/Others/WorkSpace/WatchShoppingAutomation/PyTools/myToolHelpers')
+import loginDetails
 from webScratchHelper import *
 
 class QBOWebScrap:
-    username = 'henry@watchshopping.com'
-    password = 'Ps16212045!'
     driver = webdriver.Chrome()
+    username = loginDetails.QBO_username
+    password = loginDetails.QBO_password
 
     def loginToQBO(self):
         self.driver.get('https://app.qbo.intuit.com/app/homepage')

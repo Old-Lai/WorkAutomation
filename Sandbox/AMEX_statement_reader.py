@@ -1,15 +1,13 @@
-import PyPDF2
+import pdfplumber
 import re
 
 class AMEXReader:
-    filePath = '/Users/henry/Documents/Others/PyArguments/InvoicesList/test.pdf'
+    filePath = '/Users/henry/Documents/Reconcile/Amex/pdf/test.pdf'
     pdfFileObj = None
-    pdfReader = None
 
     def __init__(self, filePath):
         self.filePath = filePath
-        self.pdfFileObj = open(filePath, 'rb')
-        self.pdfReader = PyPDF2.PdfFileReader(self.pdfFileObj, strict=False)
+        self.pdfFileObj = pdfplumber.open(filePath)
 
     def getBalances(self):
         pageObj = self.pdfReader.getPage(0)
@@ -44,8 +42,8 @@ class AMEXReader:
 
 
     def __getRawTransactionLines(self, page):
-        pageObj = self.pdfReader.getPage(page)
-        pageText = pageObj.extractText()
+        pageObj = self.pdfFileObj.pages[page]
+        pageText = pageObj.extract_text()
         pageLine = pageText.split('\n')
         # print(pageText)
         # print('--------Analyzed--------', page)
@@ -89,10 +87,17 @@ class AMEXReader:
 
     def getTransactionLines(self, pageNum):
         rawTransactions = self.__getRawTransactionLines(pageNum)
-        for transaction in rawTransactions:
-            amtRes = re.search(r'[\-0-9\,]*\.[0-9]{2}', transaction)
-            amount = transaction[amtRes.start(): amtRes.end()]
-            print(transaction)
+        if rawTransactions:
+            fedexTransactions = []
+            for transaction in rawTransactions:
+                amtRes = re.search(r'[\-0-9\,]*\.[0-9]{2}', transaction)
+                amount = transaction[amtRes.start(): amtRes.end()]
+                if 'FEDEX' in transaction:
+                    fedexTransactions.append({
+                        transaction,
+                        amount
+                    })
+                    print(transaction)
 
-amex = AMEXReader('/Users/henry/Documents/Others/PyArguments/InvoicesList/test.pdf')
-amex.getTransactionLines(10)
+amex = AMEXReader('/Users/henry/Documents/Reconcile/Amex/pdf/2022-12-28.pdf')
+amex.getTransactionLines(6)
